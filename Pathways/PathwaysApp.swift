@@ -23,10 +23,19 @@ struct PathwaysApp: App {
         }
     }()
 
-    var body: some Scene {
+   /* var body: some Scene {
         WindowGroup {
             ContentView()
         }
         .modelContainer(sharedModelContainer)
+    }
+    
+    */
+    
+    var body: some Scene {
+        WindowGroup {
+            SplashScreenView()
+                .modelContainer(for: [Answer.self])
+        }
     }
 }
