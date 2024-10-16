@@ -29,8 +29,6 @@ struct ContentView: View {
                     
                     VStack {
                         
-                        Spacer()
-                        Spacer()
                         Text("Pathways")
                             .font(.system(size: 54, weight: .bold))
                             .foregroundColor(.white)
