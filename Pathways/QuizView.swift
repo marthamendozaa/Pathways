@@ -10,11 +10,10 @@ import SwiftData
 
 struct QuizView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var answers: [Answer]
-    @Binding var user: User? //Bind to user from ContentView
+    @EnvironmentObject var userData: UserData
     @State private var currentQuestionIndex = 0
     @State private var selectedOption: Option?
-    @State private var isQuizCompleted = false //Track quiz completion
+    @State private var isQuizCompleted = false
 
     var body: some View {
         VStack {
@@ -26,46 +25,35 @@ struct QuizView: View {
                 ForEach(question.options, id: \.text) { option in
                     Button(action: {
                         selectedOption = option
-                        saveAnswer(for: question, option: option)
+                        userData.saveAnswer(for: question, option: option, modelContext: modelContext)
                         currentQuestionIndex += 1
 
-                        //Check if quiz is completed
                         if currentQuestionIndex == questions.count {
                             isQuizCompleted = true
-                            //Quiz is complete n save answers for ResultsView
+                            userData.saveQuizResults(userName: "User")
                         }
                     }) {
                         Text(option.text)
                             .padding()
-                            .background(Color(red: 95/255, green: 85/255, blue: 216/255)) // Use the custom color
+                            .background(Color(red: 95/255, green: 85/255, blue: 216/255))
                             .foregroundColor(.white)
                             .cornerRadius(10)
                     }
                     .padding(.top)
                 }
             } else if isQuizCompleted {
-                //NavigationLink to ResultsView
-                NavigationLink(destination: ResultsView(answers: answers)) {
+                Text("Quiz Completed")
+                    .font(.title)
+                    .padding()
+                NavigationLink(destination: ResultsView().environmentObject(userData)) {
                     Text("View Results")
-                        .font(.title)
                         .padding()
-                        .background(Color(red: 95/255, green: 85/255, blue: 216/255))
+                        .background(Color.green)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
             }
         }
         .padding()
-        .navigationTitle("Quiz")
-    }
-
-    private func saveAnswer(for question: Question, option: Option) {
-        let answer = Answer(questionId: question.id, selectedOption: option.text)
-        modelContext.insert(answer)
-        do {
-            try modelContext.save()
-        } catch {
-            print("Failed to save answer: \(error)")
-        }
     }
 }

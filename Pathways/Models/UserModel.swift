@@ -9,14 +9,13 @@ import SwiftData
 
 import Foundation
 
-struct User {
-    var id: UUID
-    var name: String
+struct User: Identifiable, Hashable {
+    var id = UUID()
+    //var name: String
     var quizResults: [QuizResult] //Array that holds multiple quiz results
 
-    init(id: UUID = UUID(), name: String, quizResults: [QuizResult] = []) {
-        self.id = id
-        self.name = name
+    init(quizResults: [QuizResult] = []) {
+        //self.name = name
         self.quizResults = quizResults
     }
 }

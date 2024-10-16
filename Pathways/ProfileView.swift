@@ -8,54 +8,41 @@
 import SwiftUI
 import SwiftData
 
-
 import SwiftUI
 
 struct ProfileView: View {
-    var user: User?
+    @EnvironmentObject var userData: UserData
 
+    
     var body: some View {
         VStack {
-            if let user = user {
-                Text("Profile: \(user.name)")
-                    .font(.largeTitle)
+            if let user = userData.user {
+                Text("Profile")
+                    .font(.title)
                     .padding()
-
-                Text("Quiz Results:")
-                    .font(.headline)
-                    .padding()
-
-                List(user.quizResults, id: \.id) { result in
+                
+                List(user.quizResults) { result in
                     VStack(alignment: .leading) {
-                        Text("Date Taken: \(formattedDate(result.dateTaken))")
-                            .font(.subheadline)
-
-                        ForEach(result.results, id: \.career) { match in
-                            Text("\(match.career): \(match.matchPercentage)%")
+                        Text("Quiz taken on \(result.dateTaken, formatter: dateFormatter)")
+                        ForEach(result.results) { match in
+                            Text("\(match.career): \(match.matchPercentage)% match")
                         }
+                        Divider()
                     }
-                    .padding()
                 }
             } else {
-                Text("No user data available.")
+                Text("No user data available")
+                    .font(.title)
+                    .padding()
             }
         }
         .navigationTitle("Profile")
-        .padding()
-    }
-
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
     }
 }
 
-
-
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView()
-    }
-}
+private let dateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .short
+    formatter.timeStyle = .none
+    return formatter
+}()

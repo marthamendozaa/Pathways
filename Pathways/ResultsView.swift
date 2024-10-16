@@ -8,47 +8,65 @@
 import SwiftUI
 import SwiftData
 
+
+import SwiftUI
+
 struct ResultsView: View {
-    let answers: [Answer]
+    @EnvironmentObject var userData: UserData
+    
+    
 
     var body: some View {
-        let careerMatches = calculateCareerMatches(answers: answers)
         VStack {
-            Text("Your Career Matches:")
-                .font(.title)
-            ForEach(careerMatches.sorted(by: { $0.value > $1.value }), id: \.key) { career, match in
-                Text("\(career): \(match)%")
-                    .font(.headline)
+            if let user = userData.user {
+                Text("Quiz Results")
+                    .font(.largeTitle)
+                    .padding()
+
+                List(user.quizResults) { result in
+                    VStack(alignment: .leading) {
+                        ForEach(result.results) { match in
+                            Text("\(match.career): \(match.matchPercentage)% match")
+                        }
+                    }
+                    .padding()
+                }
+                
             }
+
         }
-        .padding()
+        .navigationTitle("Results")
     }
+}
 
-    private func calculateCareerMatches(answers: [Answer]) -> [String: Int] {
-        var careerCounts: [String: Int] = [:]
-        let totalAnswers = answers.count
+/*
+struct ResultsView: View {
+    @EnvironmentObject var userData: UserData
+    
 
-        for answer in answers {
-            if let question = questions.first(where: { $0.id == answer.questionId }),
-               let option = question.options.first(where: { $0.text == answer.selectedOption }) {
-                for career in option.careerPaths {
-                    careerCounts[career, default: 0] += 1
+    var body: some View {
+        VStack {
+            Text("Quiz Results")
+                .font(.largeTitle)
+                .padding()
+
+            let results = userData.calculateCareerMatches()
+
+            if results.isEmpty {
+                Text("No results available.")
+                    .padding()
+            } else {
+                // Convert results dictionary to an array of tuples for the List
+                List(Array(results.sorted(by: { $0.value > $1.value })) , id: \.key) { careerMatch in
+                    VStack(alignment: .leading) {
+                        Text("\(careerMatch.key): \(careerMatch.value)%")
+                    }
+                    .padding()
                 }
             }
         }
-
-        var careerMatches: [String: Int] = [:]
-        for (career, count) in careerCounts {
-            let matchPercentage = (count * 100) / totalAnswers
-            careerMatches[career] = matchPercentage
-        }
-
-        return careerMatches
+        .navigationTitle("Results")
     }
 }
 
-struct ResultsView_Previews: PreviewProvider {
-    static var previews: some View {
-        ResultsView(answers: [])
-    }
-}
+*/

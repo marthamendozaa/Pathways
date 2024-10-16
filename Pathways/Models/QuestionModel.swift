@@ -7,29 +7,33 @@
 
 import Foundation
 
-struct Question {
-    let id: Int
+// Each question
+struct Question: Identifiable {
+    let id = UUID()
+    let order: Int
     let text: String
     let options: [Option]
 }
 
-struct Option {
+// Each option of the question
+struct Option: Identifiable {
+    var id = UUID()
     let text: String
     let careerPaths: [String]
 }
 
 let questions: [Question] = [
-    Question(id: 1, text: "What do you enjoy doing the most?", options: [
-        Option(text: "Helping people", careerPaths: ["Doctor", "Scientific"]),
+    Question(order: 1, text: "What do you enjoy doing the most?", options: [
+        Option(text: "Helping people", careerPaths: ["Doctor", "Scientist"]),
         Option(text: "Designing buildings", careerPaths: ["Architect"]),
         Option(text: "Writing code", careerPaths: ["Programmer"]),
-        Option(text: "Doing experiments", careerPaths: ["Scientific"])
+        Option(text: "Doing experiments", careerPaths: ["Scientist"])
     ]),
-    Question(id: 2, text: "What are you most passionate about?", options: [
+    Question(order: 2, text: "What are you most passionate about?", options: [
         Option(text: "Medicine", careerPaths: ["Doctor"]),
         Option(text: "Technology", careerPaths: ["Programmer"]),
         Option(text: "Art", careerPaths: ["Architect"]),
-        Option(text: "Research", careerPaths: ["Scientific"])
+        Option(text: "Research", careerPaths: ["Scientist"])
     ]),
     // Add more questions as needed
 ]

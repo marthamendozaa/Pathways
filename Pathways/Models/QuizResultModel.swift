@@ -8,19 +8,21 @@
 import SwiftData
 import Foundation
 
-struct QuizResult {
-    var id: UUID
+//Log of results in the profile
+struct QuizResult: Identifiable, Hashable {
+    var id = UUID()
     var dateTaken: Date
     var results: [CareerMatch] //Array of results
 
-    init(id: UUID = UUID(), dateTaken: Date = Date(), results: [CareerMatch] = []) {
-        self.id = id
+    init(dateTaken: Date = Date(), results: [CareerMatch] = []) {
         self.dateTaken = dateTaken
         self.results = results
     }
 }
 
-struct CareerMatch {
+// Career and the percentaje of match
+struct CareerMatch: Identifiable, Hashable {
+    var id = UUID()
     var career: String
     var matchPercentage: Int
 

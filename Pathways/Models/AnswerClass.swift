@@ -9,8 +9,10 @@ import Foundation
 import SwiftData
 
 
-@Model class Answer {
-    @Attribute var id: UUID
+// Answers
+@Model class Answer: Identifiable, Hashable {
+    @Attribute var id = UUID()
+    
     var questionId: Int
     var selectedOption: String
 
