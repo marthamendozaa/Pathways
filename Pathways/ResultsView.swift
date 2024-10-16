@@ -8,34 +8,30 @@
 import SwiftUI
 import SwiftData
 
-
-import SwiftUI
-
 struct ResultsView: View {
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var userData: UserData
     
     
 
     var body: some View {
-        VStack {
-            if let user = userData.user {
-                Text("Quiz Results")
-                    .font(.largeTitle)
-                    .padding()
-
-                List(user.quizResults) { result in
+            VStack {
+                if let user = userData.user, let latestQuizResult = user.quizAnswers.last?.quizResult {
                     VStack(alignment: .leading) {
-                        ForEach(result.results) { match in
+                        Text("Latest Quiz Result")
+                            .font(.title)
+                            .padding()
+                        ForEach(latestQuizResult.results) { match in
                             Text("\(match.career): \(match.matchPercentage)% match")
                         }
+                        .padding(.top, 5)
                     }
-                    .padding()
+                } else {
+                    Text("No results available.")
                 }
-                
             }
-
-        }
-        .navigationTitle("Results")
+            .padding()
+            .navigationTitle("Results")
     }
 }
 

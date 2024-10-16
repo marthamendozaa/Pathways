@@ -8,48 +8,135 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    
     @StateObject private var userData = UserData()
+    
+    @State private var colorChange = false
+    @State private var isRotating = false
+    @State private var isScaling = false
+    
+    let customPurple = Color(red: 95/255, green: 85/255, blue: 216/255)
     
     var body: some View {
         NavigationStack {
-            VStack {
-                Text("Career Quiz")
-                    .font(.largeTitle)
-                    .padding()
+            
+            ZStack {
+                customPurple
+                .ignoresSafeArea()
 
-                NavigationLink(destination: QuizView().environmentObject(userData)) {
-                    Text("Start Quiz")
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
+                VStack {
+                    
+                    Image("Logo")
+                        .padding(40)
+                        /*.overlay(
+                            Rectangle()
+                                .foregroundColor(colorChange ? .purple : .yellow)
+                                .blendMode(.multiply)
+                                .animation(Animation.linear(duration: 10).repeatForever(autoreverses: true), value: colorChange)
+                        )
+                        .onAppear {
+                            colorChange = true
+                        } */
+                        
+                    
+                    
+                    NavigationLink(destination: QuizView().environmentObject(userData)) {
+                        
+                        VStack(alignment: .leading, spacing: 12) {
+                            
+                            Text("Start Quiz")
+                                .font(.largeTitle.weight(.bold))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            HStack {
+                                Image(systemName: "sparkle.magnifyingglass")
+                                    .font(.title)
+                                    .foregroundColor(colorChange ? .purple : .yellow)
+                                    .animation(Animation.linear(duration: 1).repeatForever(autoreverses: true), value: colorChange)
+                                    .onAppear {
+                                        colorChange = true
+                                    }
+                                Image(systemName: "sparkle")
+                                    .font(.largeTitle)
+                                    .foregroundColor(customPurple)
+                                    .opacity(1)
+                                    .rotationEffect(.degrees(isRotating ? 360 : 0))
+                                    .scaleEffect(isScaling ? 1.2 : 1.0)
+                                    .animation(Animation.linear(duration: 2).repeatForever(autoreverses: false), value: isRotating)
+                                    .animation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true), value: isScaling)
+                                    .onAppear {
+                                        isRotating = true
+                                        isScaling = true
+                                    }
+                                Text("Learn what your most probable paths are".uppercased())
+                                    .font(.footnote.weight(.semibold))
+                                    .multilineTextAlignment(.leading)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            
+                        }
+                        .padding(20)
+                        .background(.white)
+                        .mask (
+                            RoundedRectangle(cornerRadius: 30, style: .continuous)
+                    
+                        )
+                        .foregroundStyle(customPurple)
+                        .padding(20)
+                        //.navigationTitle("Pathways")
+                        .toolbar {
+                            ToolbarItem(placement: .principal) {
+                                Text("Pathways")
+                                    .font(.largeTitle.weight(.bold))
+                                    .foregroundColor(.white)
+                            }
+                        }
+                        //.toolbarBackground(customPurple, for: .navigationBar) //color background
+                        //.toolbarBackground(.visible, for: .navigationBar) // se hace visible
+     
+                    }
+                    
+                    
+                    NavigationLink(destination: ProfileView().environmentObject(userData)) {
+                        
+                        VStack(alignment: .leading, spacing: 12) {
+                            
+                            Text("View Results")
+                                .font(.largeTitle.weight(.bold))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            HStack {
+                                Image(systemName: "wand.and.stars")
+                                    .font(.title)
+                                Text("Check your different results from each of your quizzes".uppercased())
+                                    .font(.footnote.weight(.semibold))
+                                    .multilineTextAlignment(.leading)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            
+                        }
+                        .padding(20)
+                        .background(.white)
+                        .mask (
+                            RoundedRectangle(cornerRadius: 30, style: .continuous)
+                    
+                        )
+                        .foregroundStyle(customPurple)
+                        .padding(20)
+                        
+                    }
+                    
                 }
-                .padding(.top, 20)
-
-                NavigationLink(destination: ResultsView().environmentObject(userData)) {
-                    Text("View Results")
-                        .padding()
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                .padding(.top, 20)
-
-                NavigationLink(destination: ProfileView().environmentObject(userData)) {
-                    Text("View Profile")
-                        .padding()
-                        .background(Color.purple)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                .padding(.top, 20)
+                
+                
             }
-            .padding()
-            .navigationTitle("Career Quiz")
+            //.padding()
+            
         }
+        
     }
+    
 }
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

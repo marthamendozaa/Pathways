@@ -13,6 +13,7 @@ struct Question: Identifiable {
     let order: Int
     let text: String
     let options: [Option]
+    var imageName: String
 }
 
 // Each option of the question
@@ -28,12 +29,12 @@ let questions: [Question] = [
         Option(text: "Designing buildings", careerPaths: ["Architect"]),
         Option(text: "Writing code", careerPaths: ["Programmer"]),
         Option(text: "Doing experiments", careerPaths: ["Scientist"])
-    ]),
+    ], imageName: "paintbrush"),
     Question(order: 2, text: "What are you most passionate about?", options: [
         Option(text: "Medicine", careerPaths: ["Doctor"]),
         Option(text: "Technology", careerPaths: ["Programmer"]),
         Option(text: "Art", careerPaths: ["Architect"]),
         Option(text: "Research", careerPaths: ["Scientist"])
-    ]),
+    ], imageName: "star"),
     // Add more questions as needed
 ]

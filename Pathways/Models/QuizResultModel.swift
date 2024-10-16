@@ -31,3 +31,5 @@ struct CareerMatch: Identifiable, Hashable {
         self.matchPercentage = matchPercentage
     }
 }
+
+

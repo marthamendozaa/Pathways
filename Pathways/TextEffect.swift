@@ -28,5 +28,5 @@ struct TextEffect: View {
 
 
 #Preview {
-    TextEffect(text: "Hiiii how are you")
+    TextEffect(text: "Hiiii how are you fjgf")
 }

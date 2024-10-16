@@ -9,6 +9,17 @@ import Foundation
 import SwiftData
 
 
+struct QuizAnswers: Identifiable, Hashable {
+    var id = UUID()
+    var answers: [Answer]
+    var quizResult: QuizResult?
+
+    init(answers: [Answer] = [], quizResult: QuizResult? = nil) {
+        self.answers = answers
+        self.quizResult = quizResult
+    }
+}
+
 // Answers
 @Model class Answer: Identifiable, Hashable {
     @Attribute var id = UUID()
@@ -22,4 +33,5 @@ import SwiftData
         self.selectedOption = selectedOption
     }
 }
+
 
