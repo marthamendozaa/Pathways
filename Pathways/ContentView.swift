@@ -20,29 +20,35 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             
+            
             ZStack {
                 customPurple
-                .ignoresSafeArea()
+                    .ignoresSafeArea()
 
                 VStack {
                     
-                    Image("Logo")
-                        .padding(40)
-                        /*.overlay(
-                            Rectangle()
-                                .foregroundColor(colorChange ? .purple : .yellow)
-                                .blendMode(.multiply)
-                                .animation(Animation.linear(duration: 10).repeatForever(autoreverses: true), value: colorChange)
-                        )
-                        .onAppear {
-                            colorChange = true
-                        } */
+                    VStack {
                         
+                        Text("Pathways")
+                            .font(.system(size: 54, weight: .bold))
+                            .foregroundColor(.white)
+                            .padding(.top, 20) // Regola questo valore per cambiare altezza
+                    }
                     
+                    
+                    Spacer().frame(height: 1) // Spazio iniziale per separare il logo
+                    
+                    Image("Logo")
+                        .resizable()
+                        .scaledToFit() // Mantiene le proporzioni originali
+                        .frame(width: 230, height: 230) // Imposta le dimensioni desiderate
+                        .padding(60)
+
+                    Spacer().frame(height: 1) // Controllo ulteriore della spaziatura sotto il logo
                     
                     NavigationLink(destination: QuizView().environmentObject(userData)) {
                         
-                        VStack(alignment: .leading, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 8) {
                             
                             Text("Start Quiz")
                                 .font(.largeTitle.weight(.bold))
@@ -75,31 +81,18 @@ struct ContentView: View {
                             }
                             
                         }
-                        .padding(20)
+                        .padding(18)
                         .background(.white)
-                        .mask (
+                        .mask(
                             RoundedRectangle(cornerRadius: 30, style: .continuous)
-                    
                         )
                         .foregroundStyle(customPurple)
                         .padding(20)
-                        //.navigationTitle("Pathways")
-                        .toolbar {
-                            ToolbarItem(placement: .principal) {
-                                Text("Pathways")
-                                    .font(.largeTitle.weight(.bold))
-                                    .foregroundColor(.white)
-                            }
-                        }
-                        //.toolbarBackground(customPurple, for: .navigationBar) //color background
-                        //.toolbarBackground(.visible, for: .navigationBar) // se hace visible
-     
                     }
-                    
-                    
+
                     NavigationLink(destination: ProfileView().environmentObject(userData)) {
                         
-                        VStack(alignment: .leading, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 8) {
                             
                             Text("View Results")
                                 .font(.largeTitle.weight(.bold))
@@ -117,25 +110,22 @@ struct ContentView: View {
                         }
                         .padding(20)
                         .background(.white)
-                        .mask (
+                        .mask(
                             RoundedRectangle(cornerRadius: 30, style: .continuous)
-                    
                         )
                         .foregroundStyle(customPurple)
                         .padding(20)
-                        
                     }
+                    
+                    Spacer() // Questo gestisce lo spazio rimanente in basso
                     
                 }
                 
+               
                 
             }
-            //.padding()
-            
         }
-        
     }
-    
 }
 
 struct ContentView_Previews: PreviewProvider {
