@@ -17,7 +17,7 @@ struct SplashScreenView: View {
 
     var body: some View {
         if isActive {
-            ContentView() // This screen will appear only after the button is tapped
+            ChatMessaging() // This screen will appear only after the button is tapped
         } else {
             ZStack {
                 Color(red: 95/255, green: 85/255, blue: 216/255)

@@ -7,6 +7,10 @@ struct ChatMessaging: View {
     @State private var showButtons = false
     @State private var showSecondMessages = false
     @State private var showBuyMessage = false
+    @State private var createProfileButton = false
+    @State private var isYesButton = true
+    @State private var isNoButton = true
+    @State private var goTu = false
     
     // State variables for typing effect
     @State private var typedMessage1 = ""
@@ -20,82 +24,111 @@ struct ChatMessaging: View {
     @State private var typedMessageBuy4 = ""
     
     var body: some View {
-        VStack(spacing: 20) {
-            // First set of messages with typing effect
-            if showMessage1 {
-                TypingBubble(text: "Welcome Beautiful Soul", typedText: $typedMessage1)
-                    .transition(.opacity)
-            }
-            
-            if showMessage2 {
-                TypingBubble(text: "Are you ready for discovering your bright future???", typedText: $typedMessage2)
-                    .transition(.opacity)
-            }
-            
-            // Yes and No Buttons
-            if showButtons {
-                HStack {
-                    Button(action: {
-                        // On Yes, hide initial messages and show second set
-                        withAnimation {
-                            showSecondMessages = true
-                            showBuyMessage = false
+    if goTu {
+        ContentView() 
+        } else {
+            VStack(spacing: 20) {
+                // First set of messages with typing effect
+                if showMessage1 {
+                    TypingBubble(text: "Welcome Beautiful Soul", typedText: $typedMessage1)
+                        .transition(.opacity)
+                }
+                
+                if showMessage2 {
+                    TypingBubble(text: "Are you ready for discovering your bright future???", typedText: $typedMessage2)
+                        .transition(.opacity)
+                }
+                
+                // Yes and No Buttons
+                if showButtons {
+                    HStack {
+                        if isYesButton {
+                            Button(action: {
+                                // On Yes, hide initial messages and show second set
+                                withAnimation {
+                                    showSecondMessages = true
+                                    showBuyMessage = false
+                                }
+                                showNextMessages(withDelay: 2, isYes: true)
+                            }) {
+                                Text("OHH YESS")
+                                    .padding()
+                                    .background(Color.green)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(8)
+                            }
                         }
-                        showNextMessages(withDelay: 2, isYes: true)
-                    }) {
-                        Text("OHH YESS")
-                            .padding()
-                            .background(Color.green)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
+                        if isNoButton {
+                            Button(action: {
+                                // On No, hide initial messages and show Buy message
+                                withAnimation {
+                                    showSecondMessages = false
+                                    showBuyMessage = true
+                                }
+                                showNextMessages(withDelay: 2, isYes: false)
+                            }) {
+                                Text("HELL NAH!")
+                                    .padding()
+                                    .background(Color.red)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(8)
+                            }
+                        }
+                        
+                        
+                        
+                        Spacer()
                     }
+                    .transition(.opacity)
+                }
+                
+                // Second set of messages if Yes is pressed
+                if showSecondMessages {
+                    VStack(spacing: 10) {
+                        TypingBubble(text: "Thats exactly what we want to hear", typedText: $typedMessage3)
+                        TypingBubble(text: "Lets start by creating your profile together", typedText: $typedMessage4)
+                        TypingBubble(text: "Once Completed we can start the journey", typedText: $typedMessage5)
+                    }
+                    .transition(.slide)
                     
+                }
+                
+                // "Buy" messages if No is pressed
+                if showBuyMessage {
+                    VStack(spacing: 10) {
+                        TypingBubble(text: "Yeah we can already say from your attitude that your future won't be that bright ..", typedText: $typedMessageBuy1)
+                        TypingBubble(text: "JUST KIDDING LOLLL", typedText: $typedMessageBuy2)
+                        TypingBubble(text: "Lets start by creating your profile together", typedText: $typedMessageBuy3)
+                        TypingBubble(text: "Once Completed we can start the journey", typedText: $typedMessageBuy4)
+                    }
+                    .transition(.scale)
+                }
+                if createProfileButton {
                     Button(action: {
+                        self.goTu = true
                         // On No, hide initial messages and show Buy message
                         withAnimation {
-                            showSecondMessages = false
-                            showBuyMessage = true
+                            
                         }
-                        showNextMessages(withDelay: 2, isYes: false)
+                        //showNextMessages(withDelay: 2, isYes: false)
                     }) {
-                        Text("HELL NAH!")
+                        Text("CREATE PROFILE")
                             .padding()
-                            .background(Color.red)
+                            .background(Color.blue)
                             .foregroundColor(.white)
                             .cornerRadius(8)
                     }
-                    Spacer()
                 }
-                .transition(.opacity)
+                
             }
-            
-            // Second set of messages if Yes is pressed
-            if showSecondMessages {
-                VStack(spacing: 10) {
-                    TypingBubble(text: "Thats exactly what we want to hear", typedText: $typedMessage3)
-                    TypingBubble(text: "Lets start by creating your profile together", typedText: $typedMessage4)
-                    TypingBubble(text: "Once Completed we can start the journey", typedText: $typedMessage5)
-                }
-                .transition(.slide)
+            .padding()
+            .onAppear {
+                // Start showing the messages one by one with delays and typing effect
+                showMessagesWithDelay()
             }
-            
-            // "Buy" messages if No is pressed
-            if showBuyMessage {
-                VStack(spacing: 10) {
-                    TypingBubble(text: "Yeah we can already say from your attitude that your future won't be that bright ..", typedText: $typedMessageBuy1)
-                    TypingBubble(text: "JUST KIDDING LOLLL", typedText: $typedMessageBuy2)
-                    TypingBubble(text: "Lets start by creating your profile together", typedText: $typedMessageBuy3)
-                    TypingBubble(text: "Once Completed we can start the journey", typedText: $typedMessageBuy4)
-                }
-                .transition(.scale)
-            }
-        }
-        .padding()
-        .onAppear {
-            // Start showing the messages one by one with delays and typing effect
-            showMessagesWithDelay()
         }
     }
+        
     
     // Function to control initial message appearance with delay
     func showMessagesWithDelay() {
@@ -134,6 +167,7 @@ struct ChatMessaging: View {
     // Function to control second set of messages or buy message based on button click
     func showNextMessages(withDelay delay: Double, isYes: Bool) {
         if isYes {
+            isNoButton = false
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 withAnimation {
                     showSecondMessages = true
@@ -145,21 +179,29 @@ struct ChatMessaging: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                     typeMessage(text: "Once Completed we can start the journey", into: $typedMessage5)
                 }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
+                    createProfileButton = true
+                }
+                
             }
         } else {
+            isYesButton = false
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 withAnimation {
                     showBuyMessage = true
                 }
                 typeMessage(text: "Yeah we can already say from your attitude that your future won't be that bright ..", into: $typedMessageBuy1)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                     typeMessage(text: "JUST KIDDING LOLLL", into: $typedMessageBuy2)
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
                     typeMessage(text: "Lets start by creating your profile together", into: $typedMessageBuy3)
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 8) {
                     typeMessage(text: "Once Completed we can start the journey", into: $typedMessageBuy4)
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+                    createProfileButton = true
                 }
             }
         }
