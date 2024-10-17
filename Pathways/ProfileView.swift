@@ -6,28 +6,47 @@
 //
 
 import SwiftUI
-import SwiftData
-
 
 struct ProfileView: View {
     @EnvironmentObject var userData: UserData
-    
+
     private var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
         formatter.timeStyle = .short
         return formatter
     }
-    
+
     var body: some View {
         VStack {
+            
             if let user = userData.user {
+                
+                // Calculate total perfect matches across all quizzes
+                let totalPerfectMatches = user.quizAnswers.reduce(0) { total, quizAnswers in
+                    total + (quizAnswers.quizResult?.results.filter { $0.matchPercentage == 100 }.count ?? 0)
+                }
+
+                Text("Total perfect matches across all quizzes: \(totalPerfectMatches)")
+                    .font(.headline)
+                    .padding(.bottom, 10)
+                
                 List(user.quizAnswers) { quizAnswers in
+                    
                     if let quizResult = quizAnswers.quizResult {
                         VStack(alignment: .leading) {
                             Text("Quiz taken on \(quizResult.dateTaken, formatter: dateFormatter)")
+                            
+                            
+                            
                             ForEach(quizResult.results) { match in
-                                Text("\(match.career): \(match.matchPercentage)% match")
+                                HStack {
+                                    Text("\(match.career): \(match.matchPercentage)% match")
+                                    if match.matchPercentage == 100 {
+                                        Image(systemName: "star.fill")
+                                            .foregroundColor(.yellow)
+                                    }
+                                }
                             }
                             Divider()
                         }
@@ -41,15 +60,7 @@ struct ProfileView: View {
     }
 }
 
-
-private let dateFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .none
-    return formatter
-}()
-
-
+// Preview
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleQuizResults = [
@@ -74,7 +85,7 @@ struct ProfileView_Previews: PreviewProvider {
                 quizResult: QuizResult(
                     dateTaken: Date().addingTimeInterval(-86400), // 1 day ago
                     results: [
-                        CareerMatch(career: "Engineer", matchPercentage: 70),
+                        CareerMatch(career: "Engineer", matchPercentage: 100),
                         CareerMatch(career: "Doctor", matchPercentage: 30)
                     ]
                 )
@@ -88,7 +99,7 @@ struct ProfileView_Previews: PreviewProvider {
                     dateTaken: Date().addingTimeInterval(-172800), // 2 days ago
                     results: [
                         CareerMatch(career: "Teacher", matchPercentage: 80),
-                        CareerMatch(career: "Lawyer", matchPercentage: 20)
+                        CareerMatch(career: "Lawyer", matchPercentage: 100)
                     ]
                 )
             )
