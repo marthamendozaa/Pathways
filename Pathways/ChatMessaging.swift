@@ -58,7 +58,7 @@ struct ChatMessaging: View {
                         }
                         showNextMessages(withDelay: 2, isYes: false)
                     }) {
-                        Text("HELL NAH")
+                        Text("HELL NAH!")
                             .padding()
                             .background(Color.red)
                             .foregroundColor(.white)
