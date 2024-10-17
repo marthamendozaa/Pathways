@@ -23,112 +23,134 @@ struct ChatMessaging: View {
     @State private var typedMessageBuy3 = ""
     @State private var typedMessageBuy4 = ""
     
+    let customPurple = Color(red: 95/255, green: 85/255, blue: 216/255)
+    let customDarkPurple = Color(red: 57/255, green: 50/255, blue: 135/255)
+    
     var body: some View {
-    if goTu {
-        ContentView() 
-        } else {
-            VStack(spacing: 20) {
-                // First set of messages with typing effect
-                if showMessage1 {
-                    TypingBubble(text: "Welcome Beautiful Soul", typedText: $typedMessage1)
-                        .transition(.opacity)
-                }
+        ZStack {
+            customPurple
+                .ignoresSafeArea()
+            
+            if goTu {
+                ContentView() // Replace with your destination view if needed
+            } else {
                 
-                if showMessage2 {
-                    TypingBubble(text: "Are you ready for discovering your bright future???", typedText: $typedMessage2)
-                        .transition(.opacity)
-                }
-                
-                // Yes and No Buttons
-                if showButtons {
-                    HStack {
-                        if isYesButton {
-                            Button(action: {
-                                // On Yes, hide initial messages and show second set
-                                withAnimation {
-                                    showSecondMessages = true
-                                    showBuyMessage = false
-                                }
-                                showNextMessages(withDelay: 2, isYes: true)
-                            }) {
-                                Text("OHH YESS")
-                                    .padding()
-                                    .background(Color.green)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(8)
-                            }
-                        }
-                        if isNoButton {
-                            Button(action: {
-                                // On No, hide initial messages and show Buy message
-                                withAnimation {
-                                    showSecondMessages = false
-                                    showBuyMessage = true
-                                }
-                                showNextMessages(withDelay: 2, isYes: false)
-                            }) {
-                                Text("HELL NAH!")
-                                    .padding()
-                                    .background(Color.red)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(8)
-                            }
-                        }
-                        
-                        
-                        
-                        Spacer()
-                    }
-                    .transition(.opacity)
-                }
-                
-                // Second set of messages if Yes is pressed
-                if showSecondMessages {
-                    VStack(spacing: 10) {
-                        TypingBubble(text: "Thats exactly what we want to hear", typedText: $typedMessage3)
-                        TypingBubble(text: "Lets start by creating your profile together", typedText: $typedMessage4)
-                        TypingBubble(text: "Once Completed we can start the journey", typedText: $typedMessage5)
-                    }
-                    .transition(.slide)
+                VStack(spacing: 20) {
+                   
+                    Text("TEAM PATHWAYS")
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(.white)
+                        .padding(.top, 20)
                     
-                }
-                
-                // "Buy" messages if No is pressed
-                if showBuyMessage {
-                    VStack(spacing: 10) {
-                        TypingBubble(text: "Yeah we can already say from your attitude that your future won't be that bright ..", typedText: $typedMessageBuy1)
-                        TypingBubble(text: "JUST KIDDING LOLLL", typedText: $typedMessageBuy2)
-                        TypingBubble(text: "Lets start by creating your profile together", typedText: $typedMessageBuy3)
-                        TypingBubble(text: "Once Completed we can start the journey", typedText: $typedMessageBuy4)
+                    // First set of messages with typing effect
+                    if showMessage1 {
+                        TypingBubble(text: "Welcome Beautiful Soul❤️", typedText: $typedMessage1)
+                            .transition(.opacity)
                     }
-                    .transition(.scale)
-                }
-                if createProfileButton {
-                    Button(action: {
-                        self.goTu = true
-                        // On No, hide initial messages and show Buy message
-                        withAnimation {
+                    
+                    if showMessage2 {
+                        TypingBubble(text: "Are you ready for discovering your bright future???", typedText: $typedMessage2)
+                            .transition(.opacity)
+                    }
+                    
+                    // Yes and No Buttons
+                    if showButtons {
+                        HStack {
+                            if isYesButton {
+                                Button(action: {
+                                    // On Yes, hide initial messages and show second set
+                                    withAnimation {
+                                        showSecondMessages = true
+                                        showBuyMessage = false
+                                    }
+                                    showNextMessages(withDelay: 2, isYes: true)
+                                }) {
+                                    Text("OHH YESS!")
+                                        .font(.system(size: 16, weight: .bold))
+                                        .padding()
+                                        .background(customDarkPurple)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(8)
+                                }
+                            }
                             
+                            if isNoButton {
+                                Button(action: {
+                                    // On No, hide initial messages and show Buy message
+                                    withAnimation {
+                                        showSecondMessages = false
+                                        showBuyMessage = true
+                                    }
+                                    showNextMessages(withDelay: 2, isYes: false)
+                                }) {
+                                    Text("HELL NAH!")
+                                        .font(.system(size: 16, weight: .bold))
+                                        .padding()
+                                        .background(customDarkPurple)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(8)
+                                }
+                            }
+                            Spacer()
                         }
-                        //showNextMessages(withDelay: 2, isYes: false)
-                    }) {
-                        Text("CREATE PROFILE")
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
+                        .padding(.horizontal, 18)
+                        .transition(.opacity)
                     }
+                    
+                    // Second set of messages if Yes is pressed
+                    if showSecondMessages {
+                        VStack(spacing: 10) {
+                            if !typedMessage3.isEmpty {
+                                TypingBubble(text: "Thats exactly what we want to hear ⭐️⭐️⭐️", typedText: $typedMessage3)
+                            }
+                            
+                            if !typedMessage4.isEmpty {
+                                TypingBubble(text: "Lets start this Journey together 😊", typedText: $typedMessage4)
+                            }
+                        }
+                        .transition(.slide)
+                    }
+                    
+                    // "Buy" messages if No is pressed
+                    if showBuyMessage {
+                        VStack(spacing: 10) {
+                            if !typedMessageBuy1.isEmpty {
+                                TypingBubble(text: "Yeah we can already say from your attitude that your future won't be that bright ..", typedText: $typedMessageBuy1)
+                            }
+                            if !typedMessageBuy2.isEmpty {
+                                TypingBubble(text: "JUST KIDDING LOLLL 😂😂", typedText: $typedMessageBuy2)
+                            }
+                            if !typedMessageBuy3.isEmpty {
+                                TypingBubble(text: "Lets start this Journey together 😊", typedText: $typedMessageBuy3)
+                            }
+                        }
+                        .transition(.scale)
+                    }
+                    
+                    // Create Profile button
+                    if createProfileButton {
+                        Button(action: {
+                            self.goTu = true
+                        }) {
+                            Text("CREATE PROFILE")
+                                .font(.system(size: 20, weight: .bold))
+                                .foregroundColor(Color(red: 95/255, green: 85/255, blue: 216/255))
+                                .padding()
+                                .background(Color.white)
+                                .cornerRadius(10)
+                        }
+                    }
+                    
+                    Spacer()
                 }
-                
-            }
-            .padding()
-            .onAppear {
-                // Start showing the messages one by one with delays and typing effect
-                showMessagesWithDelay()
+                .padding()
+                .onAppear {
+                    // Start showing the messages one by one with delays and typing effect
+                    showMessagesWithDelay()
+                }
             }
         }
     }
-        
     
     // Function to control initial message appearance with delay
     func showMessagesWithDelay() {
@@ -136,30 +158,19 @@ struct ChatMessaging: View {
             withAnimation {
                 showMessage1 = true
             }
-            typeMessage(text: "Welcome Beautiful Soul", into: $typedMessage1)
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            withAnimation {
-                showMessage2 = true
-            }
-            typeMessage(text: "Are you ready for discovering your bright future???", into: $typedMessage2)
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
-            withAnimation {
-                showButtons = true
-            }
-        }
-    }
-    
-    // Function to simulate typing effect
-    func typeMessage(text: String, into typedText: Binding<String>) {
-        typedText.wrappedValue = ""
-        let characters = Array(text)
-        for (index, character) in characters.enumerated() {
-            DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.05) {
-                typedText.wrappedValue.append(character)
+            typeMessage(text: "Welcome Beautiful Soul ❤️", into: $typedMessage1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    withAnimation {
+                        showMessage2 = true
+                    }
+                    typeMessage(text: "Are you ready for discovering your bright future???", into: $typedMessage2) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            withAnimation {
+                                showButtons = true
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -172,17 +183,16 @@ struct ChatMessaging: View {
                 withAnimation {
                     showSecondMessages = true
                 }
-                typeMessage(text: "Thats exactly what we want to hear", into: $typedMessage3)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    typeMessage(text: "Lets start by creating your profile together", into: $typedMessage4)
+                // Start typing first message
+                typeMessage(text: "Thats exactly what we want to hear ⭐️⭐️⭐️", into: $typedMessage3) {
+                    // Once the first message is done typing, start typing the second message
+                    typeMessage(text: "Lets start this Journey together 😊", into: $typedMessage4) {
+                        // Once second message is done typing, show the create profile button
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            createProfileButton = true
+                        }
+                    }
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                    typeMessage(text: "Once Completed we can start the journey", into: $typedMessage5)
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
-                    createProfileButton = true
-                }
-                
             }
         } else {
             isYesButton = false
@@ -190,18 +200,37 @@ struct ChatMessaging: View {
                 withAnimation {
                     showBuyMessage = true
                 }
-                typeMessage(text: "Yeah we can already say from your attitude that your future won't be that bright ..", into: $typedMessageBuy1)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                    typeMessage(text: "JUST KIDDING LOLLL", into: $typedMessageBuy2)
+                // Start typing first "No" response message
+                typeMessage(text: "Yeah we can already say from your attitude that your future won't be that bright ..", into: $typedMessageBuy1) {
+                    // Once the first "No" message is done typing, start the second
+                    typeMessage(text: "JUST KIDDING LOLLL 😂😂", into: $typedMessageBuy2) {
+                        // Then start the third message after the second one finishes
+                        typeMessage(text: "Lets start this Journey together 😊", into: $typedMessageBuy3) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                createProfileButton = true
+                            }
+                        }
+                    }
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
-                    typeMessage(text: "Lets start by creating your profile together", into: $typedMessageBuy3)
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 8) {
-                    typeMessage(text: "Once Completed we can start the journey", into: $typedMessageBuy4)
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                    createProfileButton = true
+            }
+        }
+    }
+    
+    // Function to simulate typing effect with completion handler
+    func typeMessage(text: String, into typedText: Binding<String>, completion: @escaping () -> Void) {
+        typedText.wrappedValue = ""
+        let characters = Array(text)
+        
+        // Typing effect: each character appears one after the other
+        for (index, character) in characters.enumerated() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.05) {
+                typedText.wrappedValue.append(character)
+                
+                // Call completion when the entire message has been typed
+                if index == characters.count - 1 {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        completion()
+                    }
                 }
             }
         }
@@ -217,31 +246,13 @@ struct TypingBubble: View {
         HStack {
             Text(typedText)
                 .padding()
-                .background(Color.gray.opacity(0.3))
+                .background(Color.white)
                 .cornerRadius(15)
                 .foregroundColor(.black)
                 .frame(maxWidth: 250, alignment: .leading) // Limit the width of the bubble
             Spacer() // Push the bubble to the left
         }
         .padding(.leading)
-    }
-}
-
-// Custom view for an outgoing chat bubble (right-aligned)
-struct ChatBubbleOutgoing: View {
-    var text: String
-    
-    var body: some View {
-        HStack {
-            Spacer() // Push the bubble to the right
-            Text(text)
-                .padding()
-                .background(Color.blue.opacity(0.8)) // Different color for outgoing messages
-                .cornerRadius(15)
-                .foregroundColor(.white)
-                .frame(maxWidth: 250, alignment: .leading) // Limit the width of the bubble
-        }
-        .padding(.trailing)
     }
 }
 
