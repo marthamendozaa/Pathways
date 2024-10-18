@@ -117,26 +117,26 @@ struct MatchMessageView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            if matchPercentage == 100 {
+            if matchPercentage >= 80 {
                 Text("Congratulations!🥳 You have a clear idea of your path!")
                     .font(.subheadline)
                     .foregroundColor(.white)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
             } else if matchPercentage >= 50 && matchPercentage < 80 {
-                Text("This may be your path! Want to explore it further? ✨")
+                Text("This may be your path!⚡️ Want to explore it further? ✨")
                     .font(.subheadline)
                     .foregroundColor(.white)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
             } else if matchPercentage < 50 && matchPercentage >= 30 {
-                Text("There's an interest in this path, you may want to explore it more. ⚡️")
+                Text("There's an interest in this path.🤔 Do you want to explore it more? It's up to you! ⚡️")
                     .font(.subheadline)
                     .foregroundColor(.white)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
             } else {
-                Text("There's something here, do you want to explore?")
+                Text("There's something here that you like. 🧐 Even if it is really small, do you want to explore? 🌙")
                     .font(.subheadline)
                     .foregroundColor(.white)
                     .lineLimit(nil)
@@ -153,9 +153,9 @@ struct ResultsView_Previews: PreviewProvider {
         // Creating mock data for preview
         let mockCareerMatches = [
             CareerMatch(career: "Engineer", matchPercentage: 100),
-            CareerMatch(career: "Doctor", matchPercentage: 36),
+            CareerMatch(career: "Doctor", matchPercentage: 86),
             CareerMatch(career: "Artist", matchPercentage: 65),
-            CareerMatch(career: "Architect", matchPercentage: 40),
+            CareerMatch(career: "Architect", matchPercentage: 20),
             CareerMatch(career: "Scientist", matchPercentage: 55),
             CareerMatch(career: "Nurse", matchPercentage: 80) // More than 5 to show the limit
         ]

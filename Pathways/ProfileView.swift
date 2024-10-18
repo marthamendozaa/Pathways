@@ -24,7 +24,7 @@ struct ProfileView: View {
             if let user = userData.user {
                 // Calculate total perfect matches across all quizzes
                 let totalPerfectMatches = user.quizAnswers.reduce(0) { total, quizAnswers in
-                    total + (quizAnswers.quizResult?.results.filter { $0.matchPercentage == 100 }.count ?? 0)
+                    total + (quizAnswers.quizResult?.results.filter { $0.matchPercentage >= 80 }.count ?? 0)
                 }
 
                 // Determine the highest match percentage across all quizzes
