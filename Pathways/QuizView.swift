@@ -14,12 +14,20 @@ struct QuizView: View {
     @State private var currentQuestionIndex = 0
     @State private var selectedOption: Option?
     @State private var isQuizCompleted = false
+    
+    @State private var progress: Double = 0.0
+    @State private var colorChange = false
+    @State private var isRotating = false
+    @State private var isScaling = false
+    @State private var showButton = false
+    
 
     let customPurple = Color(red: 95/255, green: 85/255, blue: 216/255)
 
     var body: some View {
         
         ZStack {
+            
             
             VStack {
                 
@@ -37,8 +45,8 @@ struct QuizView: View {
                     Image(systemName: question.imageName) // Add the image here
                         .resizable()
                         .scaledToFit()
-                        .foregroundColor(customPurple)
                         .frame(width: 100, height: 100) // Adjust size as needed
+                        //.symbolEffect(.bounce)
                         .padding()
                     
                     let columns = [
@@ -61,6 +69,7 @@ struct QuizView: View {
                             }) {
                                 Text(option.text)
                                     .font(.headline)
+                                
                                     .padding()
                                     .frame(width: 150, height: 150)
                                     .background(Color(red: 95/255, green: 85/255, blue: 216/255))
@@ -77,22 +86,72 @@ struct QuizView: View {
                     
                     Spacer()
                     
-                    ProgressView(value: Double(currentQuestionIndex), total: Double(questions.count))
+                    ProgressView(value: Double(currentQuestionIndex+1), total: Double(questions.count))
                             .progressViewStyle(LinearProgressViewStyle())
                             .frame(height: 0) // Set height for the progress bar
                             .padding() // Add padding around the progress bar
 
                     
                 } else if isQuizCompleted {
-                    Text("Quiz Completed")
-                        .font(.title)
+                    
+                    HStack {
+                        Image(systemName: "sparkle")
+                            .font(.largeTitle)
+                            .foregroundColor(customPurple)
+                            .opacity(1)
+                            .rotationEffect(.degrees(isRotating ? 360 : 0))
+                            .scaleEffect(isScaling ? 1.2 : 1.0)
+                            .animation(Animation.linear(duration: 2).repeatForever(autoreverses: false), value: isRotating)
+                            .animation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true), value: isScaling)
+                            .onAppear {
+                                isRotating = true
+                                isScaling = true
+                            }
+                        
+                        Text("Quiz Completed")
+                            .font(.largeTitle.weight(.bold))
+                            .padding(10)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                        
+                        Image(systemName: "sparkle")
+                            .font(.largeTitle)
+                            .foregroundColor(customPurple)
+                            .opacity(1)
+                            .rotationEffect(.degrees(isRotating ? 360 : 0))
+                            .scaleEffect(isScaling ? 1.2 : 1.0)
+                            .animation(Animation.linear(duration: 2).repeatForever(autoreverses: false), value: isRotating)
+                            .animation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true), value: isScaling)
+                            .onAppear {
+                                isRotating = true
+                                isScaling = true
+                            }
+                    }
+                    
+                    
+                    LoadingEffect()
+                        .scaledToFit()
+                        .frame(width: 200, height: 200)
                         .padding()
-                    NavigationLink(destination: ResultsView().environmentObject(userData)) {
-                        Text("View Results")
-                            .padding()
-                            .background(Color.green)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
+                        .onAppear() {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3.2) {
+                                withAnimation {
+                                    showButton = true
+                                }
+                            }
+                        }
+                    
+                    
+                    if showButton {
+                        NavigationLink(destination: ResultsView().environmentObject(userData)) {
+                            Text("View Results")
+                                .padding(20)
+                                .font(.title.weight(.bold))
+                                .background(customPurple)
+                                .foregroundColor(.white)
+                                .cornerRadius(30)
+                                
+                        }
+                        
                     }
                 }
             }
@@ -103,6 +162,7 @@ struct QuizView: View {
         }
     }
 }
+
 
 
 struct QuizView_Previews: PreviewProvider {

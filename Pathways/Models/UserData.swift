@@ -10,7 +10,8 @@ import SwiftUI
 import SwiftData
 
 class UserData: ObservableObject {
-    @Published var user: User? = User()  // Initialize with empty User
+    @Published var user: User? = User()
+    @Published var perfectMatchCareer: String?
     
     func startNewQuiz() {
         user?.quizAnswers.append(QuizAnswers(answers: []))
@@ -37,13 +38,18 @@ class UserData: ObservableObject {
             print("No active quiz found.")
             return
         }
-        
+
         let currentAnswers = user?.quizAnswers[currentQuizIndex - 1].answers ?? []
         let results = calculateCareerMatches(answers: currentAnswers)
-        let quizResult = QuizResult(dateTaken: Date(), results: results.map { CareerMatch(career: $0.key, matchPercentage: $0.value) })
+        let careerMatches = results.map { CareerMatch(career: $0.key, matchPercentage: $0.value) }
         
+        // Sort the results before saving
+        let sortedCareerMatches = careerMatches.sorted { $0.matchPercentage > $1.matchPercentage }
+
+        let quizResult = QuizResult(dateTaken: Date(), results: sortedCareerMatches)
         user?.quizAnswers[currentQuizIndex - 1].quizResult = quizResult
     }
+
     
     private func calculateCareerMatches(answers: [Answer]) -> [String: Int] {
         var careerCounts: [String: Int] = [:]
@@ -68,4 +74,12 @@ class UserData: ObservableObject {
     }
 }
 
+struct User: Identifiable, Hashable {
+    var id = UUID()
+    var quizAnswers: [QuizAnswers]
+
+    init(quizAnswers: [QuizAnswers] = []) {
+        self.quizAnswers = quizAnswers
+    }
+}
 
