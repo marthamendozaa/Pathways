@@ -55,25 +55,10 @@ struct ContentView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             HStack {
-                                Image(systemName: "sparkle.magnifyingglass")
-                                    .font(.title)
-                                    .foregroundColor(colorChange ? .purple : .yellow)
-                                    .animation(Animation.linear(duration: 1).repeatForever(autoreverses: true), value: colorChange)
-                                    .onAppear {
-                                        colorChange = true
-                                    }
-                                Image(systemName: "sparkle")
-                                    .font(.largeTitle)
-                                    .foregroundColor(customPurple)
-                                    .opacity(1)
-                                    .rotationEffect(.degrees(isRotating ? 360 : 0))
-                                    .scaleEffect(isScaling ? 1.2 : 1.0)
-                                    .animation(Animation.linear(duration: 2).repeatForever(autoreverses: false), value: isRotating)
-                                    .animation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true), value: isScaling)
-                                    .onAppear {
-                                        isRotating = true
-                                        isScaling = true
-                                    }
+                                AnimatedColorImageView(imageName: "sparkle.magnifyingglass")
+                                
+                                AnimatedImageView(imageName: "sparkle", customColor: customPurple)
+                                
                                 Text("Learn what your most probable paths are".uppercased())
                                     .font(.footnote.weight(.semibold))
                                     .multilineTextAlignment(.leading)
