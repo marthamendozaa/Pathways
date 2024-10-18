@@ -10,7 +10,7 @@ import SwiftData
 
 struct QuizView: View {
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject var userData: UserData
+    @EnvironmentObject var userData: UserData //@Query en vez de environment object??? si si,
     @State private var currentQuestionIndex = 0
     @State private var selectedOption: Option?
     @State private var isQuizCompleted = false
@@ -39,15 +39,19 @@ struct QuizView: View {
                     
                     Text(question.text)
                         .font(.largeTitle.weight(.bold))
-                        .padding()
+                        //.padding()
                         .frame(maxWidth: .infinity, alignment: .center)
+                        //.lineLimit(nil)
+                        .lineLimit(3)
+                        .minimumScaleFactor(0.5)
+                        .fixedSize(horizontal: false, vertical: true)
                     
-                    Image(systemName: question.imageName) // Add the image here
+                    Image(systemName: question.imageName)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 100, height: 100) // Adjust size as needed
+                        .frame(width: 100, height: 100) //
                         //.symbolEffect(.bounce)
-                        .padding()
+                        .padding([.leading, .bottom, .trailing], 20.0)
                     
                     let columns = [
                         GridItem(.flexible()),
@@ -76,6 +80,8 @@ struct QuizView: View {
                                     
                                     .foregroundColor(.white)
                                     .cornerRadius(30)
+                                    .lineLimit(nil)
+                                    .fixedSize(horizontal: false, vertical: true)
                                     //.lineLimit(1)
                                     //.minimumScaleFactor(0.5)
                             }
@@ -95,36 +101,14 @@ struct QuizView: View {
                 } else if isQuizCompleted {
                     
                     HStack {
-                        Image(systemName: "sparkle")
-                            .font(.largeTitle)
-                            .foregroundColor(customPurple)
-                            .opacity(1)
-                            .rotationEffect(.degrees(isRotating ? 360 : 0))
-                            .scaleEffect(isScaling ? 1.2 : 1.0)
-                            .animation(Animation.linear(duration: 2).repeatForever(autoreverses: false), value: isRotating)
-                            .animation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true), value: isScaling)
-                            .onAppear {
-                                isRotating = true
-                                isScaling = true
-                            }
+                        AnimatedImageView(imageName: "sparkle", customColor: customPurple)
                         
                         Text("Quiz Completed")
                             .font(.largeTitle.weight(.bold))
                             .padding(10)
                             .frame(maxWidth: .infinity, alignment: .center)
                         
-                        Image(systemName: "sparkle")
-                            .font(.largeTitle)
-                            .foregroundColor(customPurple)
-                            .opacity(1)
-                            .rotationEffect(.degrees(isRotating ? 360 : 0))
-                            .scaleEffect(isScaling ? 1.2 : 1.0)
-                            .animation(Animation.linear(duration: 2).repeatForever(autoreverses: false), value: isRotating)
-                            .animation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true), value: isScaling)
-                            .onAppear {
-                                isRotating = true
-                                isScaling = true
-                            }
+                        AnimatedImageView(imageName: "sparkle", customColor: customPurple)
                     }
                     
                     
